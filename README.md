@@ -1,18 +1,5 @@
+# ![D3 logo](https://d3js.org/logo.svg)  College Education Choropleth
 
-     ,-----.,--.                  ,--. ,---.   ,--.,------.  ,------.
-    '  .--./|  | ,---. ,--.,--. ,-|  || o   \  |  ||  .-.  \ |  .---'
-    |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \  :|  `--, 
-    '  '--'\|  |' '-' ''  ''  '\ `-' | .'  /   |  ||  '--'  /|  `---.
-     `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'
-    ----------------------------------------------------------------- 
+### A Data Visualization built using D3.js
 
-
-Hi there! Welcome to Cloud9 IDE!
-
-To get you started, create some files, play with the terminal,
-or visit http://docs.c9.io for our documentation.
-If you want, you can also go watch some training videos at
-http://www.youtube.com/user/c9ide.
-
-Happy coding!
-The Cloud9 IDE team
+The data represents what precentage of adults in the United States aged 25 and older who have attained at least a Bachelor degree.
