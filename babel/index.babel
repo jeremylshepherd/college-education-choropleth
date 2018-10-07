@@ -1,0 +1,89 @@
+const countyJSON =  `https://raw.githubusercontent.com/no-stack-dub-sack/testable-projects-fcc/master/src/data/choropleth_map/counties.json`;
+
+const educationJSON = `https://raw.githubusercontent.com/no-stack-dub-sack/testable-projects-fcc/master/src/data/choropleth_map/for_user_education.json`;
+
+const $$ = (q) => document.querySelector(q);
+const h = 800;
+const w = 1080;
+const margin = {top: 30, right: 50, bottom: 30, left: 50};
+   
+const toolTip = d3.select('body')
+                  .append('div')
+                  .attr('id', 'tooltip')
+                  .style('opacity', 0);
+
+const svg = d3.select("svg");
+console.log(toolTip);
+svg.style('height', h);
+svg.style('width', w);
+const path = d3.geoPath();
+const colorRange = ['#c0def1', '#050e15'];
+let colorScale = d3.scaleLinear().domain([0,100]).range(colorRange);
+
+const getEdu = (id, arr) => {
+  let fips = arr.map(a => a.fips);
+  let idx = fips.indexOf(id);
+  return arr[idx];
+};
+
+d3.json(countyJSON, (error, us) => {
+  if (error) throw error;
+  
+  d3.json(educationJSON, (error, edu) => {
+    if (error) throw error;    
+    
+    // let geom = us.objects.counties.geometries;
+    // let ids = geom.map(g => g.id);
+    // let fips = edu.map(e => e.fips);    
+    
+    let counties = svg.append("g")
+       .attr('width', w - (margin.right + margin.left))
+       .attr('height', h - (margin.top + margin.bottom))
+       .attr('transform', `translate(${margin.left}, ${margin.top})`)
+       .selectAll("path")
+       .data(topojson.feature(us, us.objects.counties).features)
+       .enter().append("path")
+       .attr("class", "county")
+       .attr('data-fips', d => d.id)
+       .attr('data-education', d => getEdu(d.id, edu).bachelorsOrHigher)
+       .attr("d", path)
+       .style('fill', d => colorScale(getEdu(d.id, edu).bachelorsOrHigher));    
+    
+
+    svg.append("path")
+       .attr('width', w - (margin.right + margin.left))
+       .attr('height', h - (margin.top + margin.bottom))
+       .attr('transform', `translate(${margin.left}, ${margin.top})`)
+       .attr("class", "state-borders")
+       .attr("d", path(topojson.mesh(us, us.objects.states, (a, b) => { return a !== b; })));
+        
+    counties.on('mouseover', d => {
+      let text = `${getEdu(d.id, edu).area_name}, ${getEdu(d.id, edu).state}: ${getEdu(d.id, edu).bachelorsOrHigher}%`;
+      let dataEdu = getEdu(d.id, edu).bachelorsOrHigher;
+      toolTip.style('left', `${d3.event.pageX}px`)
+             .style('top', `${d3.event.pageY - 60}px`)
+             .style('opacity', 1)
+             .attr('data-education', dataEdu )
+             .text(text);
+    })
+    .on('mouseout', d=> {
+      toolTip.style('opacity', 0);
+    });
+       
+    let colorLegend = d3.legendColor()
+        .labelFormat(d3.format(""))
+        .orient('horizontal')
+        .scale(colorScale)
+        .title('% of Adults 25 and over')
+        .shapeWidth(50)
+        .shapeHeight(25)
+        .shapePadding(0)
+        .labelOffset(10);
+    
+    svg.append("g")
+        .attr("transform", "translate(675, 30)")
+        .attr('id', 'legend')
+        .call(colorLegend);
+  });
+  
+});

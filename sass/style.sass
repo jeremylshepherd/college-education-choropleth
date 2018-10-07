@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css?family=Coda:800|PT+Sans:400i')
+
+body
+  display: flex
+  align-items: center
+  justify-content: center
+  flex-direction: column
+  width: 100vw
+  height: 100%
+  
+  #chart,
+  #chart-header
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: space-between
+    h1
+      font-family: 'Coda', cursive
+    h3
+      font-family: 'PT Sans', sans-serif
+ 
+    #chart-container
+      width: 1080px
+      height: 800px
+      svg
+        background: #f6f6f6
+        .state-borders
+          fill: none
+          stroke: #fff
+          stroke-width: 1px
+          stroke-linejoin: round
+          stroke-linecap: round
+          pointer-events: none          
+          
+  div#tooltip
+    position: absolute
+    background-color: #ffb353
+    padding: 15px
+    z-index: 1000
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2)
+    font-family: 'PT Sans', sans-serif
+    
